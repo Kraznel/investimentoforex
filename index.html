@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Conta Pessoal Automatizada</title>
+    <style>
+        /* --- Configurações Gerais --- */
+        :root {
+            --cor-primaria: #4a90e2; /* Azul dos números e títulos */
+            --cor-fundo: #121212; /* Fundo principal escuro */
+            --cor-cartao: #1e1e1e; /* Fundo dos cards */
+            --cor-texto: #f0f0f0; /* Texto principal claro */
+            --cor-texto-secundario: #a0a0a0; /* Texto secundário */
+            --cor-verde: #50e3c2; /* Destaque conservador */
+            --cor-vermelho: #e35050; /* Destaque arrojado */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--cor-primaria);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        p {
+            color: var(--cor-texto-secundario);
+            margin-bottom: 15px;
+        }
+
+        .secao {
+            padding: 60px 0;
+        }
+
+        /* --- Header (Herói) --- */
+        header {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1611974783360-8f6dd1708118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80') no-repeat center center/cover;
+            border-bottom: 2px solid var(--cor-primaria);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: white; [cite_start]/* [cite: 1] */
+        }
+
+        header .subtitulo {
+            font-size: 1.5rem;
+            color: var(--cor-texto); [cite_start]/* [cite: 4] */
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--cor-primaria);
+        }
+
+        header p {
+            max-width: 600px;
+            margin: 30px auto 0 auto;
+            font-size: 1.1rem;
+            color: var(--cor-texto);
+        }
+
+        /* --- Seção Desafio --- */
+        .desafio-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .desafio-item {
+            flex: 1;
+            background-color: var(--cor-cartao);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid var(--cor-primaria);
+        }
+        
+        /* --- Seção Solução --- */
+        #solucao {
+            text-align: center;
+        }
+
+        #solucao .destaque {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--cor-texto);
+            background-color: var(--cor-cartao);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 700px;
+            margin: 20px auto;
+        }
+
+        /* --- Seção Passos --- */
+        .passos-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .passo-item {
+            flex: 1;
+            text-align: center;
+            background-color: var(--cor-cartao);
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .passo-numero {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--cor-primaria);
+            margin-bottom: 10px;
+            border: 2px solid var(--cor-primaria);
+            width: 60px;
+            height: 60px;
+            line-height: 56px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+        }
+
+        /* --- Seção Planos --- */
+        .planos-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .plano-card {
+            flex: 1;
+            max-width: 400px;
+            background-color: var(--cor-cartao);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .plano-header {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .conservador .plano-header { background-color: var(--cor-verde); color: #111; }
+        .arrojado .plano-header { background-color: var(--cor-vermelho); color: white; }
+
+        .plano-body {
+            padding: 30px;
+        }
+
+        .plano-body .meta {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--cor-texto);
+            margin-bottom: 15px;
+        }
+        
+        .plano-body ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .plano-body ul li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 10px;
+            color: var(--cor-texto-secundario);
+        }
+
+        .plano-body ul li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+        }
+        
+        .conservador li::before { color: var(--cor-verde); }
+        .arrojado li::before { color: var(--cor-vermelho); }
+
+        /* --- Seção Parceria (Tabela) --- */
+        #parceria {
+            text-align: center;
+        }
+
+        #parceria p {
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+        }
+
+        table {
+            width: 100%;
+            max-width: 700px;
+            margin: 30px auto;
+            border-collapse: collapse;
+            background-color: var(--cor-cartao);
+        }
+
+        table th, table td {
+            border: 1px solid #333;
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: var(--cor-primaria);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        table td {
+            color: var(--cor-texto-secundario);
+        }
+        
+        table tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+
+        /* --- Seção Segurança --- */
+        #seguranca ul {
+            list-style: none;
+            max-width: 700px;
+            margin: 20px auto;
+        }
+
+        #seguranca ul li {
+            background-color: var(--cor-cartao);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid var(--cor-primaria);
+            color: var(--cor-texto);
+            font-weight: 500;
+        }
+
+        /* --- Seção FAQ --- */
+        details {
+            background-color: var(--cor-cartao);
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #333;
+        }
+
+        summary {
+            padding: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--cor-texto);
+            cursor: pointer;
+            position: relative;
+        }
+        
+        summary::after {
+            content: '+';
+            position: absolute;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--cor-primaria);
+        }
+
+        details[open] summary::after {
+            content: '−';
+        }
+
+        .faq-resposta {
+            padding: 0 20px 20px 20px;
+            color: var(--cor-texto-secundario);
+            border-top: 1px solid #333;
+        }
+
+        /* --- Footer (CTA) --- */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--cor-cartao);
+            border-top: 2px solid var(--cor-primaria);
+        }
+
+        .cta-botao {
+            display: inline-block;
+            background-color: var(--cor-primaria);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .cta-botao:hover {
+            transform: scale(1.05);
+            background-color: #5a9fff;
+        }
+
+        /* --- Responsividade --- */
+        @media (max-width: 768px) {
+            .desafio-grid,
+            .passos-grid,
+            .planos-grid {
+                flex-direction: column;
+            }
+
+            header h1 { font-size: 2.2rem; }
+            header .subtitulo { font-size: 1.2rem; }
+            .stat-item { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            [cite_start]<h1>Gestão de Conta Pessoal Automatizada [cite: 1]</h1>
+            [cite_start]<p class="subtitulo">Gestão de Conta Pessoal com Inteligência Artificial. [cite: 4]</p>
+
+            <div class="stats-grid">
+                [cite_start]<div class="stat-item">60.555 [cite: 5]</div>
+                [cite_start]<div class="stat-item">157.5% [cite: 6]</div>
+                [cite_start]<div class="stat-item">165 [cite: 7]</div>
+            </div>
+
+            [cite_start]<p>Nossa tecnologia opera no mercado para você, $24/7$. [cite: 8] [cite_start]Ideal para quem tem capital, mas não tem tempo ou conhecimento especializado para investir. [cite: 8] [cite_start]Deixe o seu dinheiro trabalhar de forma inteligente. [cite: 9]</p>
+        </div>
+    </header>
+
+    <main>
+        <section id="desafio" class="secao">
+            <div class="container">
+                [cite_start]<h2>O Desafio do Investidor Moderno [cite: 11]</h2>
+                <div class="desafio-grid">
+                    <div class="desafio-item">
+                        [cite_start]<h3>Falta de Tempo [cite: 12]</h3>
+                        [cite_start]<p>A rotina agitada e compromissos profissionais impedem a dedicação necessária para acompanhar o mercado. [cite: 13, 14]</p>
+                    </div>
+                    <div class="desafio-item">
+                        [cite_start]<h3>Falta de Conhecimento [cite: 15]</h3>
+                        [cite_start]<p>A complexidade do mercado financeiro, com seus termos e estratégias, pode ser uma barreira para iniciantes. [cite: 16]</p>
+                    </div>
+                    <div class="desafio-item">
+                        [cite_start]<h3>Dinheiro Parado [cite: 17]</h3>
+                        [cite_start]<p>Deixar o capital na poupança ou parado significa perder poder de compra para a inflação e oportunidades de crescimento. [cite: 17]</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solucao" class="secao" style="background-color: var(--cor-cartao);">
+            <div class="container">
+                [cite_start]<h2>A Solução: Gestão de Conta Automatizada [cite: 18]</h2>
+                [cite_start]<p>Apresentamos um serviço onde nosso sistema de automação opera diretamente na sua conta pessoal para gerar lucro. [cite: 19]</p>
+                <div class="destaque">
+                    [cite_start]<p><strong>Para você:</strong> Acompanhamento dos resultados com total transparência. [cite: 20]</p>
+                    [cite_start]<p><strong>Para nós:</strong> A complexidade da estratégia e a execução das operações. [cite: 20]</p>
+                </div>
+                [cite_start]<p>É a união perfeita entre o seu capital e a nossa tecnologia. [cite: 21]</p>
+            </div>
+        </section>
+
+        <section id="passos" class="secao">
+            <div class="container">
+                [cite_start]<h2>Começar é Simples e Rápido [cite: 22]</h2>
+                <div class="passos-grid">
+                    <div class="passo-item">
+                        [cite_start]<div class="passo-numero">01 [cite: 23]</div>
+                        [cite_start]<h3>Análise e Contato Inicial [cite: 24]</h3>
+                        [cite_start]<p>Entramos em contato para entender seu perfil de investidor e garantir que o serviço é ideal para você. [cite: 25]</p>
+                    </div>
+                    <div class="passo-item">
+                        [cite_start]<div class="passo-numero">02 [cite: 26]</div>
+                        [cite_start]<h3>Ativação na Sua Conta [cite: 27]</h3>
+                        [cite_start]<p>Com um capital mínimo de \$200 dólares na sua conta na corretora, nosso sistema é ativado e começa a operar. [cite: 28]</p>
+                    </div>
+                    <div class="passo-item">
+                        [cite_start]<div class="passo-numero">03 [cite: 29]</div>
+                        [cite_start]<h3>Acompanhe seus Resultados [cite: 30]</h3>
+                        [cite_start]<p>Você monitora o desempenho em tempo real, vendo seu capital crescer de forma inteligente e automática. [cite: 31]</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="planos" class="secao" style="background-color: var(--cor-cartao);">
+            <div class="container">
+                [cite_start]<h2>Nossos Planos de Investimento [cite: 33]</h2>
+                <div class="planos-grid">
+                    <div class="plano-card conservador">
+                        [cite_start]<div class="plano-header">Plano Conservador [cite: 34]</div>
+                        <div class="plano-body">
+                            [cite_start]<p class="meta">Meta de Lucro: 10% a 20% ao mês [cite: 35]</p>
+                            [cite_start]<p><strong>Ideal para:</strong> Quem busca crescimento consistente e de longo prazo com um gerenciamento de risco rigoroso. [cite: 36, 37]</p>
+                            <ul>
+                                [cite_start]<li>Crescimento estável [cite: 38]</li>
+                                [cite_start]<li>Segurança otimizada [cite: 39]</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="plano-card arrojado">
+                        [cite_start]<div class="plano-header">Plano Arrojado [cite: 40]</div>
+                        <div class="plano-body">
+                            [cite_start]<p class="meta">Meta de Lucro: Até 100% ao mês [cite: 41]</p>
+                            [cite_start]<p><strong>Ideal para:</strong> Quem busca lucros exponenciais e entende os riscos associados a uma maior volatilidade. [cite: 42]</p>
+                            <ul>
+                                [cite_start]<li>Potencial de alto retorno [cite: 43]</li>
+                                [cite_start]<li>Estratégia agressiva [cite: 44]</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="parceria" class="secao">
+            <div class="container">
+                [cite_start]<h2>Parceria Transparente: Só Ganhamos se Você Ganhar [cite: 45]</h2>
+                [cite_start]<p>Nossa taxa de performance é descontada apenas sobre os lucros gerados. [cite: 47]</p>
+                [cite_start]<p>Quanto maior o seu capital, maior a sua fatia dos ganhos. [cite: 48]</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            [cite_start]<th>Capital [cite: 49]</th>
+                            [cite_start]<th>Cliente [cite: 49]</th>
+                            [cite_start]<th>Empresa [cite: 49]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            [cite_start]<td>\$200 a \$2.999 [cite: 49]</td>
+                            [cite_start]<td>50% [cite: 49]</td>
+                            [cite_start]<td>50% [cite: 49]</td>
+                        </tr>
+                        <tr>
+                            [cite_start]<td>\$3.000 a \$9.999 [cite: 49]</td>
+                            [cite_start]<td>70% [cite: 49]</td>
+                            [cite_start]<td>30% [cite: 49]</td>
+                        </tr>
+                        <tr>
+                            [cite_start]<td>Acima de \$10.000 [cite: 49]</td>
+                            [cite_start]<td>80% [cite: 49]</td>
+                            [cite_start]<td>20% [cite: 49]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="seguranca" class="secao" style="background-color: var(--cor-cartao); text-align: center;">
+            <div class="container">
+                [cite_start]<h2>Segurança em Primeiro Lugar [cite: 50]</h2>
+                [cite_start]<p>E se o sistema começar a perder? [cite: 51] [cite_start]Seu capital é protegido por um sistema rigoroso de gerenciamento de risco. [cite: 51]</p>
+                <ul>
+                    [cite_start]<li>Limite de Perda (Drawdown). [cite: 52]</li>
+                    [cite_start]<li>Parada Automática: Se o limite for atingido, o robô para de operar imediatamente. [cite: 53]</li>
+                    <li>100% Lógica: Nosso sistema não tem emoções. [cite_start]Ele segue a estratégia e as travas de segurança à risca, sem hesitação ou euforia. [cite: 54]</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="faq" class="secao">
+            <div class="container">
+                [cite_start]<h2>Perguntas Frequentes (FAQ) [cite: 55]</h2>
+                
+                <details>
+                    [cite_start]<summary>O que é gestão de conta pessoal? [cite: 56]</summary>
+                    <div class="faq-resposta">
+                        [cite_start]<p>É nosso sistema de automação operando para gerar lucro em uma conta pessoal sua. [cite: 57] [cite_start]Perfeito para quem tem capital, mas não tem tempo ou conhecimento para operar. [cite: 58]</p>
+                    </div>
+                </details>
+
+                <details>
+                    [cite_start]<summary>Qual o lucro da gestão? [cite: 59]</summary>
+                    <div class="faq-resposta">
+                        [cite_start]<p>Nosso sistema é configurado para buscar metas realistas e consistentes de 10% a 20% ao mês (Plano Conservador) ou até 100% (Plano Arrojado). [cite: 60]</p>
+                    </div>
+                </details>
+
+                <details>
+                    [cite_start]<summary>Como eu adquiro o serviço? [cite: 61]</summary>
+                    <div class="faq-resposta">
+                        <p>Entre em contato conosco! [cite_start]Passaremos todos os detalhes de como iniciar e ativar a automação em sua conta. [cite: 62]</p>
+                    </div>
+                </details>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            [cite_start]<h2>Pronto para colocar seu dinheiro para trabalhar por você? [cite: 63]</h2>
+            [cite_start]<p>Chega de deixar seu dinheiro parado. [cite: 64] [cite_start]Dê o próximo passo em direção à sua liberdade financeira. [cite: 64]</p>
+            [cite_start]<p>Entre em contato conosco hoje mesmo e garanta sua gestão de conta pessoal. [cite: 65]</p>
+            [cite_start]<a href="#" class="cta-botao">FALAR COM UM ESPECIALISTA [cite: 66]</a>
+        </div>
+    </footer>
+
+</body>
+</html>
